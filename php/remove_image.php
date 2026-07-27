@@ -31,7 +31,7 @@ if(!empty($_POST['image_id'])) {
 
         $type = $stt->fetch();
 
-        if($type['type'] === 'image' || $type['type'] === 'stamp') {
+        if($type !== false && ($type['type'] === 'image' || $type['type'] === 'stamp'))  {
             if($type['type'] === 'image') {
                 $stt = $db->prepare(
                     'UPDATE board_images
