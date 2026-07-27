@@ -1,0 +1,118 @@
+@charset "UTF-8";
+
+.parts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 22px;
+}
+
+
+.part-card {
+    background: white;
+     border-radius: 4px;
+    box-shadow: var(--shadow-out), 0 2px 8px rgba(0,0,0,0.08);
+    padding: 10px 10px 14px;
+    position: relative;
+     cursor: pointer;
+    display: block;
+    transform: rotate(var(--rot, 0deg));
+    transition: all 0.25s ease;
+}
+
+[data-theme="dark"] .part-card {
+    background: #252742;
+}
+
+.part-card:hover {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow: var(--shadow-hover), 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.part-check {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.part-check-mark {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+    background: var(--surface);
+    box-shadow: var(--shadow-out);
+
+    color: transparent;
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.part-check:checked ~ .part-check-mark {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.part-card:has(.part-check:checked) {
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 0 0 0 3px var(--accent), var(--shadow-hover);
+}
+
+.part-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+    background: var(--bg);
+}
+
+.part-caption {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #555;
+     text-align: center;
+    margin-top: 8px;
+     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* might change it later, needs to double check here */
+[data-theme="dark"] .part-caption {
+    color: #999;
+}
+
+.part-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+
+    color: var(--text-muted);
+    
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+}
+
+
+/* simple responsive here */
+@media (max-width: 600px) {
+    
+    .parts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .list-actions .btn-neu {
+        width: 100%;
+        text-align: center;
+    }
+}

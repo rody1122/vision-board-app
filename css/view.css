@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+/* title and memo card */
+.view-info {
+    background: var(--surface);
+    box-shadow: var(--shadow-out);
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+}
+
+.view-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.view-date {
+    font-family: 'DM Mono', monospace;
+     font-size: 10px;
+
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+.view-memo {
+    font-size: 14px;
+
+     color: var(--text-muted);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+}
+
+
+/* the frame. view.js scales the canvas inside to fit this width,
+   so the board always shows whole, phooooooone included */
+.view-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: var(--shadow-out);
+    margin-bottom: 28px;
+}
+
+
+
+.view-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1000px;
+    height: 700px;
+    transform-origin: top left;
+}
+
+
+.view-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+@media (max-width: 600px) {
+    .view-links .btn-neu {
+        width: 100%;
+        text-align: center;
+    }
+}

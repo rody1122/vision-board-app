@@ -1,0 +1,1179 @@
+@charset "UTF-8";
+
+*, *::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cream:       #F5F0E8;
+    --rose:        #C8394A;
+    --yellow:      #E8C547;
+    --green:       #4A7C59;
+    --terracotta:  #D4693A;
+    --navy:        #2C3E6B;
+    --text:        #1A1A1A;
+    --text-mid:    #555550;
+    --text-muted:  #9A9590;
+    --white:       #FFFFFF;
+
+/* color palette part 2 */
+    --card-blue:   #BDE3F5;
+    --card-green:  #B8EDD6;
+    --card-red:    #F5BFBF;
+    --card-yellow: #FAE8A0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+
+/* cursor none possible, not sure yet */
+    background-color: var(--card-yellow);
+}
+
+/* scrollbar section */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--terracotta);
+    /* maybe too dark yet, decide it in the end if how harmonious is with the rest of the website*/
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg,var(--rose), var(--yellow), var(--green));
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 5px snow,
+    0 0 8px snow,
+    0 0 10px snow;
+}
+
+#cursor {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 80;
+    background: var(--rose);
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease, background 0.4s ease;
+}
+
+#cursor-ring {
+    width: 40px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.9px var(--rose) solid;
+    position: fixed;
+    pointer-events: none;
+    z-index: 70;
+    transform: translate(-50%, -50%);
+    transition: border-color 0.4s ease;
+    opacity: 0.45;
+}
+
+/* loading screen */
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(207, 170, 6, 0.884);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    transition: opacity 0.9s ease, visibility 0.7s ease;
+}
+
+#loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--text);
+    animation: fadeUp 0.9s ease both;
+    text-shadow: 0 0 10px var(--white),
+    0 0 15px var(--white);
+}
+
+.loading-logo sup {
+    font-size: 32px;
+    color: var(--rose);
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to   {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loading-bar-wrap {
+    width: 200px;
+    height: 2px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loading-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rose), var(--yellow), var(--green));
+    animation: loadBar 1.8s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes loadBar {
+    from { 
+        width: 0; 
+    } to {
+        width: 100%;
+    }
+}
+
+.loading-words {
+    display: flex;
+    gap: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1vh;
+    color: var(--cream);
+    text-transform: uppercase;
+}
+
+.loading-words span {
+    animation: wordPop 0.4s ease both;
+}
+
+.loading-words span:nth-child(1) {
+    animation-delay: 0.3s;
+}
+
+.loading-words span:nth-child(2) {
+    animation-delay: 0.5s;
+    color: var(--rose);
+}
+
+.loading-words span:nth-child(3) {
+    animation-delay: 0.7s;
+}
+
+.loading-words span:nth-child(4) {
+    animation-delay: 0.9s;
+    color: var(--green);
+}
+
+.loading-words span:nth-child(5) {
+    animation-delay: 1.1s;
+}
+
+@keyframes wordPop {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to   {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* needs to make it smooth later on */
+.intro-gif {
+    width: 100%;
+    height: 100vh;
+    
+}
+
+.fullscreen-gif {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    animation: fadeGif ease 0.9;
+}
+
+@keyframes fadeGif {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        
+
+    } to {
+        opacity: 20;
+        transform: translateY(0);
+    }
+}
+
+
+/* nav section from here */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0; right: 0;
+    z-index: 200;
+    padding: 28px 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 9vh;
+    font-weight: 900;
+    color: var(--black);
+    text-decoration: none;
+    mix-blend-mode: difference;
+    text-shadow: 0 0 5px var(--cream),
+    0 0 10px var(--cream),
+    0 0 14px var(--cream),
+    0 0 18px var(--cream);
+}
+
+.nav-logo sup {
+    font-size: 4vh;
+    color: var(--rose);
+}
+
+.nav-links {
+    display: flex;
+    gap: 44px;
+    list-style: none;
+}
+
+.nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--green);
+    text-shadow: 
+    0 0 3px var(--cream),
+    0 0 5px var(--yellow),
+    0 0 8px var(--yellow),
+    0 0 10px var(--card-green);
+    text-decoration: none;
+    mix-blend-mode: difference;
+}
+
+/* troquei a cor aqui e acabou sumindo o menu lol */
+.nav-links a::after {
+    content: '';
+    display: block;
+    height: 1.5px;
+    background: var(--text);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    transform: scaleX(1);
+}
+
+.nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--white);
+    border: none;
+    padding: 12px 26px; 
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.nav-btn:hover { 
+    background: var(--rose);
+    color: var(--white);
+    box-shadow: 
+    0 0 3px var(--card-yellow),
+    0 0 5px var(--rose),
+    0 0 10px var(--rose),
+    0 0 14px var(--rose),
+    0 0 18px var(--rose);
+    cursor: pointer;
+}
+
+/* door intro */
+.door-intro {
+    position: relative;
+    height: 300vh; /* tall enough for zoom scrub */
+}
+
+.door-intro-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+ .door-intro-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+
+/* doors fade out, revealing the next contents */
+.door-fade-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.43);
+    z-index: 1;
+}
+
+/* Optional door title on top */
+.door-title {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    text-align: center;
+    pointer-events: none;
+}
+
+.door-title h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 9vh;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    font-style: normal;
+    color: var(--white);
+    line-height: 0.9;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.3);
+}
+
+.door-scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    z-index: 3;
+    /* backwards (not both): keeps the entrance fade-up, but lets go after it
+       finishes so gsap can fade the hint out on scroll, same as the title.
+       with 'both' it stayed stuck at opacity 1 and lingered */
+    animation: fadeUp 1s ease 1s backwards;
+}
+
+
+.scroll-arrow {
+    width: 20px;
+    height: 32px;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 10px;
+    position: relative;
+}
+
+.scroll-arrow::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--white);
+    left: 50%; top: 6px;
+    transform: translateX(-50%);
+    animation: scrollDot 1.5s ease infinite;
+}
+
+@keyframes scrollDot {
+    0%  {  
+        top: 6px;
+        opacity: 1;
+    } 
+
+    80% {
+        top: 18px;
+        opacity: 0.2;
+    }
+
+    100%{
+        top: 6px;
+        opacity: 1;
+    }
+}
+
+
+/* from here, main section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+     justify-content: center;
+    position: relative; 
+    
+    overflow: hidden;
+    padding: 120px 40px 80px;
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16vh;
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: 3px;
+    color: var(--text);
+    margin-bottom: 32px;
+}
+
+.hero-title .word-rose {
+    color: var(--rose);
+    font-style: italic;
+    margin: 5vh;
+    }
+
+.hero-sub {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-mid);
+    max-width: 460px;
+    margin: 0 auto 48px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap; 
+}
+
+.btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+    background:  var(--text);
+    border: none;
+    padding: 16px 36px;
+    border-radius: 100px;
+    transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+    background: var(--rose);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(200,57,74,0.3);
+    cursor: pointer;
+}
+
+.btn-secondary {
+    font-family: 'DM Mono', monospace; font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: transparent;
+    border: 1.5px dotted var(--green);
+    padding: 16px 36px; 
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.btn-secondary:hover {
+    border-color: var(--text); 
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+
+
+.marquee-section {
+    padding: 24px 0;
+    overflow: hidden;
+    background: var(--text);
+}
+.marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marqueeScroll 20s linear infinite;
+    white-space: nowrap;
+}
+
+.marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 0 32px;
+    flex-shrink: 0;
+}
+
+.marquee-word {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 2px;
+}
+.marquee-word.c-rose   {
+    color: var(--rose);
+}
+
+.marquee-word.c-yellow {
+    color: var(--yellow);
+}
+
+.marquee-word.c-green  {
+    color: var(--green);
+}
+
+@keyframes marqueeScroll {
+    from {
+        transform: translateX(0);
+    }
+    to   {
+        transform: translateX(-50%);
+    }
+}
+
+/* feature grids, just explaining how and what is M3 and what it can do for the user */
+.features {
+    padding: 140px 52px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px; 
+    color: var(--rose);
+    letter-spacing: 3px;
+    text-shadow:
+    0 0 5px var(--card-red),
+    0 0 10px var(--card-red),
+    0 0 15px var(--card-red),
+    0 0 18px var(--card-red);
+    margin-bottom: 20px;
+    display: block;
+}
+
+.section-heading {
+    font-family: 'Fraunces', serif;
+    font-weight: 950;
+    line-height: 1;
+    color: var(--navy);
+    text-shadow:
+    0 0 10px var(--yellow),
+    0 0 12px var(--yellow),
+    0 0 18px var(--yellow);
+    margin-bottom: 80px;
+}
+
+.features-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 2px;
+    background: rgba(228, 193, 39, 0.06);
+}
+
+.feature-card {
+    background: var(--cream);
+    padding: 48px 40px;
+    transition: background 0.25s ease; position: relative;
+    overflow: hidden;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--rose);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.35s ease;
+}
+
+.feature-card:hover {
+    background: #EDE8DF;
+}
+
+.feature-card:hover::after {
+    transform: scaleX(1);
+}
+
+.feature-card:nth-child(2)::after { 
+    background: var(--yellow);
+}
+
+.feature-card:nth-child(3)::after { background: var(--green);
+}
+
+.feature-card:nth-child(4)::after { background: var(--terracotta);
+}
+
+.feature-card:nth-child(5)::after { background: var(--navy);
+}
+
+.feature-card:nth-child(6)::after { background: var(--green); }
+
+.feature-title {
+    font-family: 'Fraunces', serif; font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+}
+
+.feature-title:hover {
+    font-size: 28px;
+    font-weight: 750;
+}
+
+.feature-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-mid); }
+
+/* from here just text reaveal section, it can stay there for a while but if its too long better to remove */
+.text-reveal-section {
+    padding: 160px 52px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.reveal-line {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-size: 9vh;
+    font-weight: 700;
+
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+
+.reveal-line.accent {
+    color: var(--terracotta);
+}
+
+/* 
+circle section, around the logo for a bigger impact and light background for no other visual influence */
+.circle-transition-section {
+    height: 100vh;
+    display: flex;
+    align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+}
+
+.circle-logo {
+    position: relative;
+    z-index: 2;
+    font-family: 'Fraunces', serif;
+    font-size: 22vh;
+    font-weight: 900;
+        color: var(--text);
+    opacity: 0;
+}
+
+.circle-logo sup {
+    font-size: 0.4em;
+    color: var(--rose);
+}
+
+/* the actual black circle that grows during scroll */
+.circle-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--text);
+    clip-path: circle(0% at 50% 50%);
+    z-index: 3;
+}
+
+/* horizontal sliding cards where you can see the steps t join M3 */
+.cards-horizontal-section {
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.cards-strip {
+    display: flex;
+    height: 100vh;
+     will-change: transform;
+}
+
+
+.step-card-full {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 80px 10vw;
+    position: relative;
+    overflow: hidden;
+}
+
+.step-card-full:nth-child(1) {
+    background: var(--card-blue);
+}
+
+.step-card-full:nth-child(2) { background: var(--card-green);
+}
+
+.step-card-full:nth-child(3) { background: var(--card-red);
+}
+
+.step-card-full:nth-child(4) { background: var(--card-yellow);
+}
+
+/* shadow step number, still in the sliding cards */
+.step-card-full::before {
+    content: attr(data-num);
+    position: absolute;
+    right: 8vw;
+    bottom: -0.1em;
+    font-family: 'Fraunces', serif;
+    font-size: 40vw;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(0,0,0,0.06);
+    letter-spacing: -0.04em;
+    user-select: none;
+}
+
+.step-card-inner {
+    max-width: 560px;
+    position: relative;
+    z-index: 1;
+}
+
+.step-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.4);
+    margin-bottom: 24px;
+    display: block;
+}
+
+.step-title {
+    font-family: 'Fraunces', serif;
+    font-size: 9vh;
+     font-weight: 900;
+    letter-spacing: -0.04em; line-height: 0.95;
+    color: var(--text); 
+    margin-bottom: 24px;
+}
+
+.step-desc {
+    font-size: 18px; line-height: 1.65;
+    color: rgba(0,0,0,0.55); max-width: 420px;
+}
+
+/* background circles for a delicate image */
+.cta-section {
+    padding: 160px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-blob-1 {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: var(--card-blue);
+    filter: blur(50px);
+    opacity: 0.4;
+    top: -100px;
+    left: -100px;
+}
+
+.cta-blob-2 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: var(--rose);
+    filter: blur(100px);
+    opacity: 0.35;
+    bottom: -100px;
+    right: -100px;
+}
+
+.cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: 11vh;
+    line-height:0.9;
+    border-bottom: 1px;
+
+    letter-spacing: 1px;
+    color: var(--text); 
+    margin-bottom: 32px;
+    position: relative; 
+    z-index: 1;
+}
+
+.cta-title em {
+    color: var(--rose);
+}
+
+.cta-sub {
+    font-size: 18px; color: var(--text-mid);
+    margin-bottom: 52px;
+    position: relative; z-index: 1;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+
+}
+
+/* footer section, maybe needs other company logos for a effect */
+footer {
+    background: var(--text);
+    padding: 80px 52px 52px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 80px;
+}
+
+.footer-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 33px;
+    font-weight: 900;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.03em;
+}
+
+.foter-logo sup {
+    color: var(--rose);
+    font-size: 3vh;
+}
+
+.footer-tagline {
+    font-size: 14px;
+    color: var(--yellow);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.footer-links {
+    display: flex;
+    gap: 36px;
+    list-style: none; }
+
+.footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35); text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover { 
+    color: var(--white); 
+}
+
+.footer-email-wrap {
+    position: relative; 
+    display: inline-block; 
+    margin-bottom: 80px;
+    cursor: pointer;
+}
+
+.footer-email {
+    font-family: 'Fraunces', serif;
+font-weight: 900;
+    color: var(--white);
+    text-decoration: none; 
+    display: block;
+    transition: color 0.3s;
+    cursor: pointer;
+    line-height: 1;
+    font-size: 12vh;
+}
+
+.footer-email:hover {
+    
+    color: var(--yellow);
+}
+
+/* from here, just the badge to copy email */
+.copy-badge {
+    position: absolute;
+    left: 0; top: 0;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    border: none; 
+    border-radius: 100px;
+    padding: 7px 16px;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0;
+    transition: opacity 0.2s, color 0.25s, border-color 0.25s, background 0.25s;
+    pointer-events: none;
+     white-space: nowrap;
+    z-index: 10;
+}
+
+.copy-badge.copied {
+    background: var(--green);
+    color: var(--white);
+    border-color: var(--green);
+    opacity: 1;
+}
+
+.footer-bottom {
+    display: flex;
+     justify-content: space-between; 
+    align-items: center;
+    padding-top: 32px;
+     border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-copy {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: rgba(255, 255, 255, 0.493); letter-spacing: 0.08em;
+padding-right: 50%;
+}
+
+/* modal section starts over here, mainly login and sign up part */
+.modal-overlay {
+    position: fixed; 
+    inset: 0;
+    background: rgba(245,240,232,0.88);
+    backdrop-filter: blur(24px);
+    z-index: 1000; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;  
+    cursor: pointer;
+    transition: opacity 0.4s cubic-bezier(.23,1,.32,1);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;  
+}
+
+.modal {
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 28px; padding: 52px 56px;
+    width: 100%; max-width: 480px; position: relative;
+    transform: translateY(40px) scale(0.96);
+    transition: transform 0.4s cubic-bezier(.23,1,.32,1);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.1);
+}
+
+.modal-overlay.active .modal { transform: translateY(0) scale(1); }
+
+.modal-close {
+    position: absolute; 
+    top: 20px;
+     right: 20px;
+    background: rgba(0,0,0,0.05); 
+    border: none;
+    color: var(--text-muted); 
+    width: 36px; 
+    height: 36px;
+    border-radius: 50%; 
+    font-size: 14px;
+    cursor: pointer;
+
+    display: flex;
+     align-items: center;
+     justify-content: center;
+    transition: all 0.3s;
+}
+
+.modal-close:hover { 
+    
+    background: rgba(0,0,0,0.08); 
+    color: var(--text);
+}
+
+.modal-tabs {
+    display: flex;
+     gap: 0; 
+     margin-bottom: 40px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+
+.modal-tab {
+    font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700;
+    color: var(--text-muted); background: none; border: none;
+    padding: 10px 24px 18px;
+    cursor: pointer; position: relative;
+    transition: color 0.2s; letter-spacing: -0.02em;
+}
+
+.modal-tab::after {
+    content: ''; position: absolute;
+    bottom: -1px; left: 0; right: 0; height: 2.5px;
+    background: var(--rose); transform: scaleX(0);
+    transition: transform 0.25s; border-radius: 2px;
+}
+
+.modal-tab.active { color: var(--text); }
+
+.modal-tab.active::after { transform: scaleX(1); }
+
+/* needs a review here about active modal panels */
+.modal-panel { 
+    display: none;
+}
+
+.modal-panel.active { 
+    display: block;
+    margin: 5px;
+}
+
+.form-group { margin-bottom: 20px; }
+
+.form-label {
+    display: block; 
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; 
+    letter-spacing: 0.12em; 
+    text-transform: uppercase;
+    color: var(--text-muted); 
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+     background: #F7F5F0;
+    border: 1.5px solid transparent; 
+    border-radius: 12px;
+    padding: 14px 18px; 
+    color: var(--text);
+    font-family: 'Inter', sans-serif; 
+    font-size: 15px;
+    outline: none; 
+    transition: all 0.2s;
+}
+
+.form-input:focus { border-color: var(--rose); background: var(--white); }
+
+.form-input::placeholder { color: var(--text-muted); opacity: 0.5; }
+
+.form-submit {
+    width: 100%; background: var(--text);
+    
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    padding: 17px;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-top: 28px; 
+    transition: all 0.25s;
+}
+
+.form-submit:hover {
+    background: var(--rose);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(200,57,74,0.25);
+}
+
+.form-errors {
+    margin-bottom: 20px;
+}
+
+
+.form-error {
+    font-size: 13px;
+    color: var(--rose);
+    font-family: 'DM Mono', monospace; 
+    padding: 4px 0;
+    letter-spacing: 0.02em;
+}
+
+.modal-switch {
+    text-align: 
+    center; margin-top: 24px; 
+    font-size: 14px; 
+    color: var(--text-muted);
+}
+
+.modal-switch button {
+    background: none;
+    border: none;
+    color: var(--rose);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* utils here */
+.reveal { opacity: 0; }
+
+
+/* responsive media over here */
+@media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .features, .how-section, .cta-section { padding: 80px 24px; }
+    footer { padding: 60px 24px 40px; }
+    .footer-top { flex-direction: column; gap: 40px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .modal { padding: 36px 28px; margin: 0 16px; }
+    .step-card-full { padding: 60px 8vw; }
+    .step-title { font-size: 36px; }
+    .step-desc { font-size: 16px; }
+    .copy-badge { right: -64px; }
+}
