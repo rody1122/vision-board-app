@@ -77,6 +77,8 @@ console.log('スタンプ追加後 res.note_id =', res.note_id);
 
 noteId.value = res.note_id;
 libraryNoteId.value = res.note_id;
+cancelNoteId.value = res.note_id;
+console.log(document.getElementById('cancelNoteId').value);
 
 console.log('代入後 hidden noteId =', document.getElementById('noteId').value);
 

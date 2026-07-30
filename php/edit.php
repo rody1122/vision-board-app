@@ -4,7 +4,6 @@ require_once 'functions.php';
 
 login_check();
 
-// might delete it later or just add an option for guest? but might increase database area
 $username = 'ゲスト';
 
 try {
@@ -108,8 +107,8 @@ try {
             'contents' => ''
         ];
     }
-    // might need to change it later
 
+    // 倉庫画像の座標はここでは変更せず、edit.phpで追加時に初期化する
     if(!empty($_POST['image_ids'])) {
         $image_ids = $_POST['image_ids'];
 
@@ -398,7 +397,7 @@ $userName = e($username);
 
                 <!-- 保存前の追加画像を取り消す -->
                 <form action="edit.php" method="post" class="inline-form">
-                    <input type="hidden" name="id" value="<?= e($note['id']) ?>">
+                    <input type="hidden" id="cancelNoteId" name="id" value="<?= e($note['id']) ?>">
                     <input type="hidden" name="cancel_edit" value="1">
                     <button type="submit" class="btn-neu btn-danger-soft">キャンセル</button>
                 </form>
