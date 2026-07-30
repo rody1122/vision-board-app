@@ -28,10 +28,22 @@ try {
 
     $update_sql = 
         'UPDATE board_images 
-        SET note_id = 
-        NULL WHERE note_id = ? AND user_id = ?';
+        SET 
+            note_id = NULL,
+            is_temp = 0
+        WHERE note_id = ? 
+        AND user_id = ? 
+        AND type = "image"';
 
     $update_stt = $db->prepare($update_sql);
+
+    $stamp_delete_sql =
+        'DELETE FROM board_images
+        WHERE note_id = ?
+        AND user_id = ?
+        AND type = "stamp"';
+
+    $stamp_delete_stt = $db->prepare($stamp_delete_sql);
 
     $delete_sql = 
         'DELETE FROM notes 
@@ -46,6 +58,9 @@ try {
 
         // 1. 先に対象ノートの画像を倉庫（NULL）へ戻す
         $update_stt->execute([$note_id, $_SESSION['id']]);
+
+        // スタンプを削除
+        $stamp_delete_stt->execute([$note_id, $_SESSION['id']]);
 
         // 2. ノートを削除する
         $delete_stt->execute([$note_id, $_SESSION['id']]);
