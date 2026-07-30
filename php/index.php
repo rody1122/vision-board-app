@@ -78,8 +78,8 @@ if (isset($_GET['modal']))
             <span class="shuffle-text" data-text="Sign in">Sign in</span></a></li>
     </ul>
 
-    <button class="nav-btn" onclick="openModal('register')">
-        Get started
+    <button class="nav-btn" onclick="openModal('login')">
+        Login
     </button>
 </nav>
 
@@ -432,7 +432,7 @@ placeholder="質問を入力してください...">
 </footer>
 
 <!-- modal part, mostly login section only for now -->
-<div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)">
+<div class="modal-overlay" id="authModal">
     <div class="modal">
         <button class="modal-close" onclick="closeModal()">✕</button>
         <div class="modal-tabs">

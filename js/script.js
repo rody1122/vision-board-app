@@ -366,10 +366,6 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
-function handleOverlayClick(e) {
-    if (e.target === document.getElementById('authModal')) closeModal();
-}
-
 function switchTab(tab) {
     [
         'login',
