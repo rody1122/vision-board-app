@@ -23,6 +23,8 @@ function highlightSelected(img) {
 
 // ボタン取得
 const saveBtn = document.getElementById('save-btn');
+const addImageBtn = document.getElementById('add-image-btn');
+const addImageForm = document.getElementById('add-image-form');
 const plusSize = document.getElementById('plusSize');
 const minusSize = document.getElementById('minusSize');
 const rotateRight = document.getElementById('rotateRight');
@@ -153,7 +155,6 @@ rotateLeft.addEventListener('click', function() {
 
 });
 
-
 // each swatch button carries its css value in data-bg.
 // clicking paints the canvas right away, and the value rides
 // along with the save request so it survives a reload
@@ -172,9 +173,7 @@ document.querySelectorAll('.bg-swatch').forEach(function(swatch) {
     });
 });
 
-saveBtn.addEventListener('click', function() {
-
-
+function imagePosition(mode) {
     let noteId = document.getElementById('noteId').value ;
     let noteTitle = document.getElementById('noteTitle').value;
     let noteContents = document.getElementById('noteContents').value;
@@ -197,30 +196,58 @@ saveBtn.addEventListener('click', function() {
 
     const positionsJson = JSON.stringify(positions);
 
+    const data = {
+            noteId: noteId,
+            noteTitle: noteTitle,
+            noteContents: noteContents,
+            positions: positionsJson,
+            bgStyle: boardCanvas.dataset.bg
+    }
+
+    if(mode === 'save') {
+        data.saveBoard = 1;
+    }
+
+    if(mode === 'temp') {
+        data.tempSave = 1;
+    }
+
     // AjaxでPHPへ送信
     $.ajax({
             url: 'save_position.php',
             type: 'post',
-            data: {
-                saveBoard: 1,
-                noteId: noteId,
-                noteTitle: noteTitle,
-                noteContents: noteContents,
-                positions: positionsJson,
-                bgStyle: boardCanvas.dataset.bg
-            },
+            data: data,
             dataType: 'json'
     })
     .done(function(data) {
         if (data.status === 'success') {
-            $('#save-message').text('保存しました');
              document.getElementById('noteId').value = data.note_id;
             const addImageId = document.querySelector('#add-image-form input[name="id"]');
             addImageId.value = data.note_id;
+
+            if(mode === 'save') {
+                $('#save-message').text('保存しました');
+            }
+
+            if(mode === 'temp') {
+                addImageForm.submit();
+            }
     }
     })
     .fail(function(error) {
         alert('データを取得できませんでした');
         console.log(error);
     });
+}
+
+
+
+saveBtn.addEventListener('click', function() {
+    imagePosition('save');
 });
+
+addImageBtn.addEventListener('click', function() {
+    imagePosition('temp');
+});
+
+console.log("board.js");

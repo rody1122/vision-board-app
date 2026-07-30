@@ -10,8 +10,6 @@ if(!empty($_POST['image_id'])) {
 
         $default_x = 0;
         $default_y = 0;
-        $default_width = 200;
-        $default_height = 200;
         $default_angle = 0;
         $default_z_index = 1;
 
@@ -40,8 +38,6 @@ if(!empty($_POST['image_id'])) {
                     is_temp = 0,
                     x = :x, 
                     y = :y, 
-                    width = :width, 
-                    height = :height, 
                     angle = :angle,
                     z_index = :z_index
                 WHERE id = :id
@@ -50,8 +46,6 @@ if(!empty($_POST['image_id'])) {
 
                 $stt->bindValue(':x', $default_x);
                 $stt->bindValue(':y', $default_y);
-                $stt->bindValue(':width', $default_width);
-                $stt->bindValue(':height', $default_height);
                 $stt->bindValue(':angle', $default_angle);
                 $stt->bindValue(':z_index', $default_z_index);
                 $stt->bindValue(':id', $image_id, PDO::PARAM_INT);

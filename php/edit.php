@@ -12,8 +12,6 @@ try {
 
     $default_x = 0;
     $default_y = 0;
-    $default_width = 200;
-    $default_height = 200;
     $default_angle = 0;
     $default_z_index = 1;
     // ログインユーザー名を取得
@@ -30,47 +28,68 @@ try {
     // ボードIDを取得（GET: 表示、POST: 更新）
     $note_id = $_POST['id'] ?? $_GET['id'] ?? '';
 
-    // 編集をキャンセルした画像をライブラリへ戻す
-    if (!empty($_POST['cancel_edit']) || !empty($_POST['from_library'])) {
-    $stt = $db->prepare(
-        'UPDATE board_images
-    SET
-        note_id = NULL, 
-        is_temp = 0,
-        x = :x, 
-        y = :y, 
-        width = :width, 
-        height = :height, 
-        angle = :angle,
-        z_index = :z_index
-    WHERE note_id = :note_id
-    AND user_id = :user_id
-    AND is_temp = 1
-    AND type = "image"'
-    );
+    // キャンセル処理
+    if (!empty($_POST['cancel_edit'])) {
 
-    $stt->bindValue(':x', $default_x);
-    $stt->bindValue(':y', $default_y);
-    $stt->bindValue(':width', $default_width);
-    $stt->bindValue(':height', $default_height);
-    $stt->bindValue(':angle', $default_angle);
-    $stt->bindValue(':z_index', $default_z_index);
-    $stt->bindValue(':note_id', $note_id, PDO::PARAM_INT);
-    $stt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
-    $stt->execute();
-
-    $stt = $db->prepare(
-        'DELETE FROM board_images
+        $stt = $db->prepare(
+            'UPDATE board_images
+        SET
+            note_id = NULL, 
+            is_temp = 0,
+            x = :x, 
+            y = :y, 
+            angle = :angle,
+            z_index = :z_index
         WHERE note_id = :note_id
         AND user_id = :user_id
-        AND type = "stamp"'
+        AND is_temp = 1
+        AND type = "image"'
         );
-    $stt->bindValue(':note_id', $note_id, PDO::PARAM_INT);
-    $stt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
-    $stt->execute();
 
-    header('Location: list.php?id=' . $note_id);
-    exit;
+        $stt->bindValue(':x', $default_x);
+        $stt->bindValue(':y', $default_y);
+        $stt->bindValue(':angle', $default_angle);
+        $stt->bindValue(':z_index', $default_z_index);
+        $stt->bindValue(':note_id', $note_id, PDO::PARAM_INT);
+        $stt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
+        $stt->execute();
+
+        $stt = $db->prepare(
+            'DELETE FROM board_images
+            WHERE note_id = :note_id
+            AND user_id = :user_id
+            AND type = "stamp"'
+            );
+        $stt->bindValue(':note_id', $note_id, PDO::PARAM_INT);
+        $stt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
+        $stt->execute();
+
+        $stt_saved = $db->prepare(
+            'SELECT is_saved
+            FROM notes
+            WHERE id = :id
+            AND user_id = :user_id'
+        );
+        $stt_saved->bindValue(':id', $note_id, PDO::PARAM_INT);
+        $stt_saved->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
+        $stt_saved->execute();
+        $is_saved = $stt_saved->fetch();
+
+        if($is_saved !== false && $is_saved['is_saved'] == 0) {
+            $stt = $db->prepare(
+                'DELETE FROM notes
+                WHERE id = :id
+                AND user_id = :user_id
+                ');
+                $stt->bindValue(':id', $note_id, PDO::PARAM_INT);
+                $stt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
+                $stt->execute();
+            header('Location: list.php');
+            exit;
+        } else {
+            header('Location: library.php');
+            exit;
+        }
     }
 
     // ボード情報を取得
@@ -101,8 +120,6 @@ try {
                     is_temp = 1,
                     x = :x,
                     y = :y,
-                    width = :width,
-                    height = :height,
                     angle = :angle,
                     z_index = :z_index
                 WHERE id = :id 
@@ -114,8 +131,6 @@ try {
         $stt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
         $stt->bindValue(':x', $default_x);
         $stt->bindValue(':y', $default_y);
-        $stt->bindValue(':width', $default_width);
-        $stt->bindValue(':height', $default_height);
         $stt->bindValue(':angle', $default_angle);
         $stt->bindValue(':z_index', $default_z_index);
 
@@ -365,7 +380,7 @@ $userName = e($username);
             <div class="toolbar-group">
                 <!-- 画像追加フォーム -->
                 <span class="toolbar-label">Add/Remove</span>
-                <form action="edit.php" method="post" id="add-image-form" class="inline-form">
+                <form action="list.php" method="post" id="add-image-form" class="inline-form">
                     <input type="hidden" name="id" id="libraryNoteId" value="<?= e($note['id']) ?>">
                     <input type="hidden" name="title" id="sendTitle">
                     <input type="hidden" name="contents" id="sendContents">

@@ -12,11 +12,11 @@ $err_msg = $_SESSION['err_msg'] ?? '';
 unset($_SESSION['success_msg'], $_SESSION['err_msg']);
 
 // URLパラメータから現在のノートIDを取得
-$note_id = $_GET['id'] ?? '';
+$note_id = $_POST['id'] ?? $_GET['id'] ?? '';
 
 // URLパラメータから保存前のタイトル・メモを取得
-$title = $_GET['title'] ?? '';
-$contents = $_GET['contents'] ?? '';
+$title = $_POST['title'] ?? $_GET['title'] ?? '';
+$contents = $_POST['contents'] ?? $_GET['contents'] ?? '';
 
 $clean_note_id = $_GET['clean_id'] ?? '';
 

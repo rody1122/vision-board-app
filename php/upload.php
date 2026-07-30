@@ -16,7 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $db = getDb();
 
-        $stt = $db->prepare('INSERT INTO board_images(user_id, img_path, width, height, angle) VALUES(:user_id, :img_path, :width, :height, :angle)');
+        $stt = $db->prepare(
+            'INSERT INTO 
+            board_images(user_id, img_path, width, height, angle) 
+            VALUES(:user_id, :img_path, :width, :height, :angle)');
 
         // アップロードされた画像の数分１つずつ
         for ($i = 0; $i < count($_FILES['img_path']['name']); $i++) {
@@ -57,14 +60,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $src = $_FILES['img_path']['tmp_name'][$i];
                 $dest = uniqid() . '_' . $_FILES['img_path']['name'][$i];
 
+                // 画像の縦横比率を維持
+                $size = getimagesize($src);
+                $originalWidth = $size[0];
+                $originalHeight = $size[1];
+
+                if($originalWidth >= $originalHeight) {
+                    $scale = 200 / $originalWidth;
+                } else {
+                    $scale = 200 / $originalHeight;
+                }
+
+                $width  = round($originalWidth * $scale);
+                $height = round($originalHeight * $scale);
+
                 if (!move_uploaded_file($src, '../images/' . $dest)) {
                     $err_msg = 'アップロード処理に失敗しました。';
                 } else {
                     $stt->bindValue(':user_id', $_SESSION['id']);
 
                     $stt->bindValue(':img_path', '../images/' . $dest);
-                    $stt->bindValue(':width', 200);
-                    $stt->bindValue(':height', 200);
+                    $stt->bindValue(':width', $width);
+                    $stt->bindValue(':height', $height);
                     $stt->bindValue(':angle', 0);
                     $stt->execute();
 

@@ -2,15 +2,6 @@
 
 const imageIdInput = document.getElementById('image_id');
 
-const addImageForm = document.getElementById('add-image-form');
-const addImageBtn = document.getElementById('add-image-btn');
-
-const sendTitle = document.getElementById('sendTitle');
-const sendContents = document.getElementById('sendContents');
-
-const noteTitle = document.getElementById('noteTitle');
-const noteContents = document.getElementById('noteContents');
-
 let selectedImage = null;
 
 // ボード上の画像（画像・スタンプ）がクリックされたか確認
@@ -22,18 +13,6 @@ document.addEventListener('click', function(e) {
         console.log(imageIdInput.value);
     }
 });
-
-// 画像追加画面へ遷移してもタイトル・メモを保持する
-addImageBtn.addEventListener('click', function() {
-    // 入力中のタイトル・メモをhiddenへコピー
-    sendTitle.value = noteTitle.value;
-    sendContents.value = noteContents.value;
-// console.log(addImageForm.action);
-// console.log(addImageForm.method);
-    // list.phpへ送信
-    addImageForm.submit();
-})
-
 
 // side bar hidding section
 // needs some adjustment later
@@ -78,6 +57,7 @@ const noteId = document.getElementById('noteId');
 const libraryNoteId = document.getElementById('libraryNoteId');
 
 console.log('送信note_id =', noteId.value);
+
 $.ajax({
     url: 'add_sticker.php',
     type: 'post',
@@ -93,8 +73,12 @@ $.ajax({
         alert('スタンプを追加できませんでした');
 return;
 }
+console.log('スタンプ追加後 res.note_id =', res.note_id);
+
 noteId.value = res.note_id;
 libraryNoteId.value = res.note_id;
+
+console.log('代入後 hidden noteId =', document.getElementById('noteId').value);
 
 const img = document.createElement('img');
 img.src = res.img_path;
