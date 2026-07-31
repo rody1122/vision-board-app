@@ -184,6 +184,8 @@ $userName = $user ? e($user['user_name']) : 'User';
             <p>写真をドラッグして、倉庫に追加しましょう</p>
         </div>
 
+        
+
         <div class="topbar-right">
             <img src="../images/tarot.png" style="width: 50px; border:0;" alt="switch mode">
             <span class="theme-toggle-label" id="theme-label"></span>
@@ -193,7 +195,6 @@ $userName = $user ? e($user['user_name']) : 'User';
             </a>
         </div>
     </div>
-
 
     <?php if (!empty($err_msg)): ?>
         <div class="alert alert-error"><?= e($err_msg) ?></div>
@@ -213,7 +214,9 @@ $userName = $user ? e($user['user_name']) : 'User';
 
     <!-- posts to itself, exactly like original file -->
     <form class="upload-form" id="uploadForm" method="post" enctype="multipart/form-data">
-
+        
+    <div class="alert alert-error" id="error-message" style="display:none;"></div>
+    
         <!-- drop zone -->
         <div class="dropzone" id="dropzone">
             <input type="file"
@@ -227,19 +230,22 @@ $userName = $user ? e($user['user_name']) : 'User';
                 <img src="../icons/addpooh.gif" style="width: 45px;" alt="add">
             </div>
             <div class="dropzone-title">ここに写真をドラッグ</div>
-            <p class="dropzone-sub">または</p>
+        </div>
 
-            <button type="button" class="dropzone-btn" id="addFile">
-                ファイルを選択する
+        <div class="upload-actions">
+            <button type="button" class="select-file-btn" id="addFile">
+                    ファイルから追加
             </button>
         </div>
 
         <!-- little previews show up here after choosing files -->
         <div class="preview-grid" id="fileArea"></div>
 
-        <button type="submit" class="upload-submit">
-            画像を保存する →
-        </button>
+        <div class="upload-actions">
+            <button type="submit" class="upload-submit">
+                画像を保存する →
+            </button>
+        </div>
 
     </form>
 

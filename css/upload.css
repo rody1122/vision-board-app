@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
  .upload-form {
-    max-width: 760px;
+    max-width: 960px;
 }
 
 .dropzone {
@@ -10,7 +10,8 @@
     border: 2px dashed var(--border);
 
     border-radius: 24px;
-    padding: 56px 32px;
+    padding: 32px;
+    min-height: 320px;
     text-align: center;
     transition: all 0.25s ease;
     cursor: pointer;
@@ -28,7 +29,7 @@
 .dropzone-icon {
     width: 64px;
     height: 64px;
-    margin: 0 auto 16px;
+    margin: 64px auto 16px;
     border-radius: 20px;
     background: var(--surface);
     box-shadow: var(--shadow-out);
@@ -86,6 +87,28 @@
 .dropzone-btn:active {
     box-shadow: var(--shadow-in);
     transform: translateY(0);
+}
+
+#error-message {
+    display: none;
+
+    width: 100%;
+    margin: 0 0 20px;
+    padding: 14px 20px;
+
+    border-left: 4px solid var(--accent-pink);
+    border-radius: 18px;
+
+    background: var(--surface);
+    box-shadow: var(--shadow-out);
+
+    color: var(--accent-pink);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#error-message::before {
+    content: "⚠ ";
 }
 
 /* small polaroids and standard sizes */
@@ -221,6 +244,9 @@
 }
 
 .upload-submit {
+    display: block;
+    margin: 0 auto;
+
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -228,7 +254,7 @@
     color: var(--text);
     background: var(--surface);
     box-shadow: var(--shadow-out);
-    
+
     border: none;
     border-radius: 100px;
     padding: 17px 36px;
@@ -249,7 +275,48 @@
     transform: translateY(0);
 }
 
+.upload-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
 
+/* ファイル選択ボタン */
+.upload-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 12px;
+    margin-bottom: 40px;
+}
+
+.select-file-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+
+    color: var(--text-muted);
+    background: var(--surface);
+    box-shadow: var(--shadow-out);
+
+    border: none;
+    border-radius: 100px;
+    padding: 11px 24px;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.select-file-btn:hover {
+    color: var(--accent);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.select-file-btn:active {
+    box-shadow: var(--shadow-in);
+    transform: translateY(0);
+}
 
 
 
