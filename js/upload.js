@@ -18,17 +18,11 @@ let dt = new DataTransfer();
 const rotations = [-2, 1.5, -1, 2, -1.5, 0.5];
 
 
-// clicking the button or the zone itself opens the file picker
-// 追加ボタンまたはドロップエリアをクリックするとファイル選択画面を開く
+// 「ファイルから追加」ボタンをクリックするとファイル選択画面を開く
 addFile.addEventListener('click', function (e) {
     e.stopPropagation();
     fileInput.click();
 });
-
-dropzone.addEventListener('click', function () {
-    fileInput.click();
-});
-
 
 // picking files the normal way
 // 通常のファイル選択で画像を追加する
