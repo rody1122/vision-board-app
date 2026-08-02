@@ -195,24 +195,6 @@ $userName = e($username);
         <input type="hidden" name="title" value="<?= e($title) ?>">
         <input type="hidden" name="contents" value="<?= e($contents) ?>">
 
-        <label class="select-actions">
-            <input type="checkbox" id="select-all-parts">
-            <span class="select-all-mark">✓</span>
-            <span class="select-all-text">すべて選択</span>
-        </label>
-
-        <!-- action bar, sticks around while you scroll the parts -->
-        <div class="list-actions">
-            <button type="button" class="btn-neu btn-primary" onclick="goToEditPage()">
-                選択したパーツで編集を始める →
-            </button>
-
-            <button type="button" class="btn-neu btn-danger" onclick="deleteSelectedParts()">
-                選択したパーツを削除する
-            </button>
-        </div>
-
-
         <?php if (empty($parts)): ?>
             <div class="empty-state">
                 <div class="empty-state-icon">
@@ -222,6 +204,23 @@ $userName = e($username);
                 <div class="empty-state-sub"><a href="upload.php" class="section-link">写真をアップして</a>パーツを追加しましょう</div>
             </div>
         <?php else: ?>
+
+            <label class="select-actions">
+                <input type="checkbox" id="select-all-parts">
+                <span class="select-all-mark">✓</span>
+                <span class="select-all-text">すべて選択</span>
+            </label>
+
+            <!-- action bar, sticks around while you scroll the parts -->
+            <div class="list-actions">
+                <button type="button" class="btn-neu btn-primary" onclick="goToEditPage()">
+                    選択したパーツで編集を始める →
+                </button>
+
+                <button type="button" class="btn-neu btn-danger" onclick="deleteSelectedParts()">
+                    選択したパーツを削除する
+                </button>
+            </div>
 
             <div class="parts-grid">
                 <?php $rotations = [-2, 1.5, -1, 2, -1.5, 0.5]; ?>
