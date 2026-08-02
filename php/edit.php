@@ -204,7 +204,7 @@ $userName = e($username);
                 <span>ダッシュボード</span>
             </a>
 
-            <a href="edit.php" class="nav-item">
+            <a href="edit.php" class="nav-item active">
                 <span class="nav-icon">+</span>
                 <span>ボード作成・編集</span>
             </a>

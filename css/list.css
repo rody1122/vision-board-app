@@ -1,5 +1,53 @@
 @charset "UTF-8";
 
+.select-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+#select-all-parts {
+    position: absolute;
+    opacity: 0;
+}
+
+#select-all-parts:checked ~ span {
+    color: var(--accent);
+}
+
+.select-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-bottom: 14px;
+    color: var(--text-muted);
+}
+
+.select-all-mark {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: var(--shadow-out);
+
+    color: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#select-all-parts:checked + .select-all-mark {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 0 8px var(--accent);
+}
+
 .parts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));

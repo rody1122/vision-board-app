@@ -195,6 +195,12 @@ $userName = e($username);
         <input type="hidden" name="title" value="<?= e($title) ?>">
         <input type="hidden" name="contents" value="<?= e($contents) ?>">
 
+        <label class="select-actions">
+            <input type="checkbox" id="select-all-parts">
+            <span class="select-all-mark">✓</span>
+            <span class="select-all-text">すべて選択</span>
+        </label>
+
         <!-- action bar, sticks around while you scroll the parts -->
         <div class="list-actions">
             <button type="button" class="btn-neu btn-primary" onclick="goToEditPage()">

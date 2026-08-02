@@ -32,3 +32,24 @@ function deleteSelectedParts() {
         form.submit();
     }
 }
+
+// すべてのパーツを選択
+const selectAllParts = document.getElementById('select-all-parts');
+const partChecks = document.querySelectorAll('.part-check');
+
+// 「すべて選択」の状態に合わせて、全パーツの選択状態を切り替える
+selectAllParts.addEventListener('change', function() {
+    partChecks.forEach(function(partCheck) {
+        partCheck.checked = selectAllParts.checked;
+    });
+});
+
+// 追加：各パーツのチェックが変更されたときの処理
+partChecks.forEach(function(partCheck) {
+    partCheck.addEventListener('change', function() {
+        const isAllChecked = Array.from(partChecks).every(function(check) {
+            return check.checked;
+        });
+        selectAllParts.checked = isAllChecked;
+    });
+});

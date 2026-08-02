@@ -177,6 +177,12 @@ $userName = e($username);
 
         <?php else: ?>
 
+            <label class="select-actions">
+                <input type="checkbox" id="select-all-boards">
+                <span class="select-all-mark">✓</span>
+                <span class="select-all-text">すべて選択</span>
+            </label>
+
             <form id="delete-bulk-form" action="delete_note.php" method="POST">
                 <div class="list-actions">
                     <button type="button" class="btn-neu btn-danger" onclick="deleteSelectedBoards()">
@@ -191,7 +197,7 @@ $userName = e($username);
 
                         <label class="delete-checkbox-label">
                             <input type="checkbox" name="note_ids[]" value="<?php echo e($board['id']); ?>" class="board-delete-checkbox">
-                            <span>このボードを削除選択</span>
+                            <span class="board-check-mark">✓</span>
                         </label>
 
                         <?php
