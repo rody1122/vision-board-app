@@ -41,19 +41,22 @@ function deleteSelectedBoards() {
 const selectAllBoards = document.getElementById('select-all-boards');
 const boardChecks = document.querySelectorAll('.board-delete-checkbox');
 
-// 「すべて選択」の状態に合わせて、全ボードの選択状態を切り替える
-selectAllBoards.addEventListener('change', function() {
-    boardChecks.forEach(function(boardCheck) {
-        boardCheck.checked = selectAllBoards.checked;
-    });
-});
 
-// 追加：各ボードのチェックが変更されたときの処理
-boardChecks.forEach(function(boardCheck) {
-    boardCheck.addEventListener('change', function() {
-        const isAllChecked = Array.from(boardChecks).every(function(check) {
-            return check.checked;
+if(selectAllBoards) {
+    // 「すべて選択」の状態に合わせて、全ボードの選択状態を切り替える
+    selectAllBoards.addEventListener('change', function() {
+        boardChecks.forEach(function(boardCheck) {
+            boardCheck.checked = selectAllBoards.checked;
         });
-        selectAllBoards.checked = isAllChecked;
     });
-});
+
+    // 各ボードのチェックが変更されたときの処理
+    boardChecks.forEach(function(boardCheck) {
+        boardCheck.addEventListener('change', function() {
+            const isAllChecked = Array.from(boardChecks).every(function(check) {
+                return check.checked;
+            });
+            selectAllBoards.checked = isAllChecked;
+        });
+    });
+}

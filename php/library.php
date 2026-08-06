@@ -34,6 +34,7 @@ try {
             FROM notes n
             LEFT JOIN board_images bi ON n.id = bi.note_id
             WHERE n.user_id = ? 
+            AND n.is_saved = 1
             GROUP BY n.id
             ORDER BY last_touched DESC';
     $stmt = $db->prepare($sql);

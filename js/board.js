@@ -1,5 +1,5 @@
 'use strict';
-
+console.log('board.js 最新版');
 // ドラッグ用
 let isDragging = false;
 let dragImg = null;
@@ -79,7 +79,6 @@ document.addEventListener('mousemove', function(event) {
 
 
 document.addEventListener('mouseup', function(event) {
-
     isDragging = false;
     dragImg = null;
 });
@@ -95,6 +94,11 @@ document.addEventListener('click', function(event) {
     event.target.style.zIndex = maxZ;
 });
 
+boardCanvas.addEventListener('click', function(event) {
+    if(!event.target.classList.contains('board-img')) {
+        highlightSelected(null);
+    }
+})
 
 // 選択画像を大きくする
 plusSize.addEventListener('click', function() {
@@ -111,7 +115,7 @@ plusSize.addEventListener('click', function() {
     selectImg.style.height = height + 'px';
 });
 
-
+// 選択画像を小さくする
 minusSize.addEventListener('click', function() {
 
     if (selectImg === null) return;
@@ -173,7 +177,14 @@ document.querySelectorAll('.bg-swatch').forEach(function(swatch) {
     });
 });
 
-function imagePosition(mode) {
+// ---------- 配置情報を保存 ----------
+
+// mode（保存方法）
+// save：正式保存
+// temp：編集中の一時保存
+function imagePosition(mode, nextAction) {
+
+    // note_id、タイトル、メモに入力された情報を取得
     let noteId = document.getElementById('noteId').value ;
     let noteTitle = document.getElementById('noteTitle').value;
     let noteContents = document.getElementById('noteContents').value;
@@ -181,7 +192,7 @@ function imagePosition(mode) {
     const positions = [];
     const boardImgs = document.querySelectorAll('.board-img');
 
-
+    // 各画像の情報を取得
     boardImgs.forEach(function(img) {
         positions.push({
         imgId : img.dataset.imgId,
@@ -194,6 +205,7 @@ function imagePosition(mode) {
         });
     });
 
+    // JSONへ変換
     const positionsJson = JSON.stringify(positions);
 
     const data = {
@@ -219,20 +231,28 @@ function imagePosition(mode) {
             data: data,
             dataType: 'json'
     })
+    // 保存成功後の処理
     .done(function(data) {
+        // save_position.phpで採番・取得したnote_idを各フォームへ反映
         if (data.status === 'success') {
              document.getElementById('noteId').value = data.note_id;
             const addImageId = document.querySelector('#add-image-form input[name="id"]');
             addImageId.value = data.note_id;
 
+            // 保存後の処理
+
+            // 正式保存時のみ「保存しました」を表示
             if(mode === 'save') {
                 $('#save-message').text('保存しました');
             }
 
-            if(mode === 'temp') {
+            // 一時保存後の移動先
+            if(nextAction === 'addImage') {
                 addImageForm.submit();
+            } else if(nextAction) {
+                location.href = nextAction;
             }
-    }
+        }
     })
     .fail(function(error) {
         alert('データを取得できませんでした');
@@ -247,7 +267,17 @@ saveBtn.addEventListener('click', function() {
 });
 
 addImageBtn.addEventListener('click', function() {
-    imagePosition('temp');
+    imagePosition('temp', 'addImage');
 });
 
-console.log("board.js");
+const navItems = document.querySelectorAll('.nav-item');
+
+navItems.forEach(function(navItem) {
+    navItem.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const clickedUrl = event.currentTarget.href;
+        imagePosition('temp', clickedUrl);
+    });
+});
+

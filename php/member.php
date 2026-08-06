@@ -15,7 +15,7 @@ $user = $stt->fetch(PDO::FETCH_ASSOC);
 $userName = $user ? e($user['user_name']) : 'User';
 
 // total boards this user made
-$stt2 = $db->prepare('SELECT COUNT(*) as total FROM notes WHERE user_id = :uid');
+$stt2 = $db->prepare('SELECT COUNT(*) as total FROM notes WHERE user_id = :uid AND is_saved = 1');
 $stt2->bindValue(':uid', $_SESSION['id']);
 $stt2->execute();
 $stats = $stt2->fetch(PDO::FETCH_ASSOC);
@@ -228,8 +228,81 @@ top section from here, specially the menu and user part (pics and user name) -->
         </a>
 
 
-        <?php
+<?php
+    // ログイン時に編集中ボードを探す
+    $stt_draft_board = $db->prepare(
+        'SELECT id,
+                title,
+                bg_style
+        FROM notes
+        WHERE user_id = :user_id
+        AND is_draft = 1'
+        );
+    $stt_draft_board->bindValue(":user_id", $_SESSION["id"]);
+    $stt_draft_board->execute();
+    $draft_note = $stt_draft_board->fetch();
 
+    // 編集中ボードがあれば画像の配置を取得
+    if(!empty($draft_note)) {
+        $stt_draft_parts = $db->prepare(
+            'SELECT note_id,
+                    img_path,
+                    x,
+                    y,
+                    width,
+                    height,
+                    angle,
+                    z_index
+            FROM board_images
+            WHERE note_id = :note_id
+            AND user_id = :user_id
+            AND is_temp = 1'
+        );
+        $stt_draft_parts->bindValue(':note_id', $draft_note['id']);
+        $stt_draft_parts->bindValue(':user_id', $_SESSION["id"]);
+        $stt_draft_parts->execute();
+        $draft_parts = $stt_draft_parts->fetchAll(PDO::FETCH_ASSOC);
+  
+        $draft_bg = $draft_note['bg_style'] ?? '';
+            if($draft_bg === '' || $draft_bg === null) {
+                $draft_bg = '#ffffff';
+            }
+}
+        // 編集中ボードがあるなら表示する
+    if($draft_note): ?>
+        
+        <div id="draft-overlay">
+            <div id="draft-modal" data-note-id="<?= $draft_note['id']; ?>">
+                <p class="draft-message">編集中のボードがあります</p>
+                <div class="board-thumb-wrapper">
+                    <div class="mini-board-canvas" style="background: <?= e($draft_bg) ?>;">
+                        <?php foreach ($draft_parts as $part): ?>
+                            <?php if(!empty($part['img_path'])): ?>
+                            <img src="<?= e($part['img_path']) ?>"
+                                alt="パーツ"
+                                style="
+                                position: absolute;
+                                left: <?= e((float)$part['x']) ?>px;
+                                top: <?= e((float)$part['y']) ?>px;
+                                width: <?= e((float)($part['width'] ?: 200)) ?>px;
+                                height: <?= e((float)($part['height'] ?: 200)) ?>px;
+                                transform: rotate(<?= e((float)($part['angle'] ?? 0)) ?>deg);
+                                z-index: <?= e((int)($part['z_index'] ?? 1)) ?>;
+                                object-fit: fill;
+                                ">
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <p class="draft-choice">編集を</p>
+                <button type="button" id="resume-board" class="draft-btn">続ける</button>
+                <button type="button" id="discard-board" class="draft-btn">破棄</button>
+            </div>
+        </div>
+    <?php endif; ?>
+
+
+<?php
 // most recent boards, plus how many parts each one has
         $stt5 = $db->prepare(
             'SELECT n.*,
@@ -237,6 +310,7 @@ top section from here, specially the menu and user part (pics and user name) -->
                  WHERE bi2.note_id = n.id) AS parts_count
                 FROM notes n
                 WHERE n.user_id = :uid
+                AND n.is_saved = 1
                 ORDER BY n.created_at DESC
                 LIMIT 7'
         );
@@ -327,7 +401,8 @@ top section from here, specially the menu and user part (pics and user name) -->
     </div>
 </main>
 
-
+<script src="https://code.jquery.com/jquery-4.0.0.js"
+        integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
 <script src="../js/member.js"></script>
 <script src="../js/library.js"></script>
 </body>

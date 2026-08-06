@@ -18,6 +18,25 @@ if(!empty($_POST['saveBoard']) || !empty($_POST['tempSave'])) {
         $note_id = $_POST['noteId'] ?? $_POST['id'] ?? null;
 
         if(empty($note_id)) {
+            // note_idがなければ編集中ボードを探す
+            $stt = $db->prepare(
+                'SELECT id
+                FROM notes
+                WHERE user_id = :user_id
+                AND is_saved = 0
+                ORDER BY updated_at DESC
+                LIMIT 1
+            ');
+            $stt->bindValue(':user_id', $_SESSION['id']);
+            $stt->execute();
+            $draft_note = $stt->fetch();
+            // 見つかれば編集中ボードのidをnote_idに入れる
+            if($draft_note) {
+                $note_id = $draft_note['id'];
+            }
+        }
+
+        if(empty($note_id)) {
             // note_idがなければ新規ボードを作成
             $title = empty($_POST['title']) ? '無題' : $_POST['title'];
             $contents = empty($_POST['contents']) ? '' : $_POST['contents'];
