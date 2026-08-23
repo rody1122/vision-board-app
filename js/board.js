@@ -273,11 +273,25 @@ addImageBtn.addEventListener('click', function() {
 const navItems = document.querySelectorAll('.nav-item');
 
 navItems.forEach(function(navItem) {
+    // ナビをクリック
     navItem.addEventListener('click', function(event) {
-        event.preventDefault();
 
+        event.preventDefault();
+        // 移動先URLを取得
         const clickedUrl = event.currentTarget.href;
-        imagePosition('temp', clickedUrl);
+
+        let noteTitle = document.getElementById('noteTitle').value;
+        let noteContents = document.getElementById('noteContents').value;
+        const boardImgs = document.querySelectorAll('.board-img');
+
+        // 現在のタイトル・メモ・ボード上のパーツを確認
+        if(noteTitle || noteContents || boardImgs.length > 0) {
+            // 1つでもあればtemp保存してから移動
+            imagePosition('temp', clickedUrl);
+        } else {
+            // 何もなければ保存せずそのまま移動
+            location.href = clickedUrl;
+        }
     });
 });
 
